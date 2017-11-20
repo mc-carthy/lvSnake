@@ -8,6 +8,9 @@ function love.load()
     }
 
     directionQueue = { 'right' }
+
+    gridXCount = 20
+    gridYCount = 15
 end
 
 function love.update(dt)
@@ -25,24 +28,33 @@ function love.update(dt)
 
         if directionQueue[1] == 'right' then
             nextXPos = nextXPos + 1
+            if nextXPos > gridXCount then
+                nextXPos = 1
+            end
         elseif directionQueue[1] == 'up' then
             nextYPos = nextYPos - 1
+            if nextYPos < 1 then
+                nextYPos = gridYCount
+            end
         elseif directionQueue[1] == 'left' then
             nextXPos = nextXPos - 1
+            if nextXPos < 1 then
+                nextXPos = gridXCount
+            end
         elseif directionQueue[1] == 'down' then
             nextYPos = nextYPos + 1
+            if nextYPos > gridYCount then
+                nextYPos = 1
+            end
         end
 
         table.insert(snakeSegments, 1, { x = nextXPos, y = nextYPos })
         table.remove(snakeSegments)
 
-        print('Tick')
     end
 end
 
 function love.draw()
-    local gridXCount = 20
-    local gridYCount = 15
     local cellSize = 35
 
     love.graphics.setColor(63, 63, 63)

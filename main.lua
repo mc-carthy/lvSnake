@@ -7,10 +7,15 @@ function love.load()
         { x = 1, y = 1},
     }
 
-    directionQueue = { 'right' }
-
     gridXCount = 20
     gridYCount = 15
+
+    foodPos = {
+        x = love.math.random(1, gridXCount),
+        y = love.math.random(1, gridYCount)
+    }
+
+    directionQueue = { 'right' }
 end
 
 function love.update(dt)
@@ -60,21 +65,23 @@ function love.draw()
     love.graphics.setColor(63, 63, 63)
     love.graphics.rectangle('fill', 0, 0, gridXCount * cellSize, gridYCount * cellSize)
 
-    for segmentIndex, segment in ipairs(snakeSegments) do
-        love.graphics.setColor(95, 191, 95)
+    local function drawCell(x, y)
         love.graphics.rectangle(
             'fill',
-            (segment.x - 1) * cellSize,
-            (segment.y - 1) * cellSize,
+            (x - 1) * cellSize,
+            (y - 1) * cellSize,
             cellSize - 1,
             cellSize - 1
         )
     end
 
-    for directionIndex, direction in ipairs(directionQueue) do
-        love.graphics.setColor(191, 191, 191)
-        love.graphics.print('directionQueue['..directionIndex..']: '..direction, 15, 15 * directionIndex)
+    for segmentIndex, segment in ipairs(snakeSegments) do
+        love.graphics.setColor(95, 191, 95)
+        drawCell(segment.x, segment.y)
     end
+
+    love.graphics.setColor(191, 0, 0)
+    drawCell(foodPos.x, foodPos.y)
 end
 
 function love.keypressed(key)

@@ -72,15 +72,27 @@ function love.update(dt)
             end
         end
 
-        table.insert(snakeSegments, 1, { x = nextXPos, y = nextYPos })
+        local canMove = true
 
-        if snakeSegments[1].x == foodPos.x and snakeSegments[1].y == foodPos.y then
-            moveFood()
-        else
-            table.remove(snakeSegments)
+        for segmentIndex, segment in ipairs(snakeSegments) do
+            if segmentIndex ~= #snakeSegments and 
+                nextXPos == segment.x and
+                nextYPos == segment.y  then
+                canMove = false
+            end
         end
 
-
+        if canMove then
+            table.insert(snakeSegments, 1, { x = nextXPos, y = nextYPos })
+            
+            if snakeSegments[1].x == foodPos.x and snakeSegments[1].y == foodPos.y then
+                moveFood()
+            else
+                table.remove(snakeSegments)
+            end
+        else
+            love.load()
+        end
     end
 end
 

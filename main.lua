@@ -7,7 +7,7 @@ function love.load()
         { x = 1, y = 1},
     }
 
-    direction = 'right'
+    directionQueue = { 'right' }
 end
 
 function love.update(dt)
@@ -16,16 +16,20 @@ function love.update(dt)
     if timer >= timerLimit then
         timer = timer - timerLimit
 
+        if #directionQueue > 1 then
+            table.remove(directionQueue, 1)
+        end
+
         local nextXPos = snakeSegments[1].x
         local nextYPos = snakeSegments[1].y
 
-        if direction == 'right' then
+        if directionQueue[1] == 'right' then
             nextXPos = nextXPos + 1
-        elseif direction == 'up' then
+        elseif directionQueue[1] == 'up' then
             nextYPos = nextYPos - 1
-        elseif direction == 'left' then
+        elseif directionQueue[1] == 'left' then
             nextXPos = nextXPos - 1
-        elseif direction == 'down' then
+        elseif directionQueue[1] == 'down' then
             nextYPos = nextYPos + 1
         end
 
@@ -54,16 +58,21 @@ function love.draw()
             cellSize - 1
         )
     end
+
+    for directionIndex, direction in ipairs(directionQueue) do
+        love.graphics.setColor(191, 191, 191)
+        love.graphics.print('directionQueue['..directionIndex..']: '..direction, 15, 15 * directionIndex)
+    end
 end
 
 function love.keypressed(key)
-    if key == 'right' then
-        direction = 'right'
-    elseif key == 'up' then
-        direction = 'up'
-    elseif key == 'left' then
-        direction = 'left'
-    elseif key == 'down' then
-        direction = 'down'
+    if key == 'right' and directionQueue[#directionQueue] ~= 'left' and directionQueue[#directionQueue] ~= 'right' then
+        table.insert(directionQueue, 'right')
+    elseif key == 'up' and directionQueue[#directionQueue] ~= 'down' and directionQueue[#directionQueue] ~= 'up' then
+        table.insert(directionQueue, 'up')
+    elseif key == 'left' and directionQueue[#directionQueue] ~= 'right' and directionQueue[#directionQueue] ~= 'left' then
+        table.insert(directionQueue, 'left')
+    elseif key == 'down' and directionQueue[#directionQueue] ~= 'up' and directionQueue[#directionQueue] ~= 'down' then
+        table.insert(directionQueue, 'down')
     end
 end

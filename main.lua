@@ -54,7 +54,16 @@ function love.update(dt)
         end
 
         table.insert(snakeSegments, 1, { x = nextXPos, y = nextYPos })
-        table.remove(snakeSegments)
+
+        if snakeSegments[1].x == foodPos.x and snakeSegments[1].y == foodPos.y then
+            foodPos = {
+                x = love.math.random(1, gridXCount),
+                y = love.math.random(1, gridYCount)
+            }
+        else
+            table.remove(snakeSegments)
+        end
+
 
     end
 end

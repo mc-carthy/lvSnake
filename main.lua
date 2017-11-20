@@ -10,10 +10,29 @@ function love.load()
     gridXCount = 20
     gridYCount = 15
 
-    foodPos = {
-        x = love.math.random(1, gridXCount),
-        y = love.math.random(1, gridYCount)
-    }
+    function moveFood()
+        local possibleFoodPos = {}
+    
+        for foodX = 1, gridXCount do
+            for foodY = 1, gridYCount do
+                local possible = true
+    
+                for segmentIndex, segment in ipairs(snakeSegments) do
+                    if foodX == segment.x and foodY == segment.y then
+                        possible = false
+                    end
+                end
+    
+                if possible then
+                    table.insert(possibleFoodPos, { x = foodX, y = foodY })
+                end
+            end
+        end
+    
+        foodPos = possibleFoodPos[love.math.random(#possibleFoodPos)]
+    end
+
+    moveFood()
 
     directionQueue = { 'right' }
 end
@@ -56,10 +75,7 @@ function love.update(dt)
         table.insert(snakeSegments, 1, { x = nextXPos, y = nextYPos })
 
         if snakeSegments[1].x == foodPos.x and snakeSegments[1].y == foodPos.y then
-            foodPos = {
-                x = love.math.random(1, gridXCount),
-                y = love.math.random(1, gridYCount)
-            }
+            moveFood()
         else
             table.remove(snakeSegments)
         end

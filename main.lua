@@ -74,7 +74,7 @@ end
 function love.draw()
     local cellSize = 35
 
-    love.graphics.setColor(63, 63, 63)
+    love.graphics.setColor(63 / 255, 63 / 255, 63 / 255)
     love.graphics.rectangle('fill', 0, 0, gridXCount * cellSize, gridYCount * cellSize)
 
     local function drawCell(x, y)
@@ -89,14 +89,14 @@ function love.draw()
 
     for segmentIndex, segment in ipairs(snakeSegments) do
         if snakeAlive then
-            love.graphics.setColor(95, 191, 95)
+            love.graphics.setColor(95 / 255, 191 / 255, 95 / 255)
         else
-            love.graphics.setColor(127, 127, 127)
+            love.graphics.setColor(127 / 255, 127 / 255, 127 / 255)
         end
         drawCell(segment.x, segment.y)
     end
 
-    love.graphics.setColor(191, 0, 0)
+    love.graphics.setColor(191 / 255, 0 / 255, 0 / 255)
     drawCell(foodPos.x, foodPos.y)
 end
 
